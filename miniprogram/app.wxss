@@ -1,0 +1,39 @@
+page {
+  --bg-color: #F2F4F8;
+  --text-main: #1A1D20;
+  --text-sub: #8E949F;
+  --primary-color: #502BD8;
+  --success-color: #00C48C;
+  --warning-color: #FF7B52;
+  --card-bg: #FFFFFF;
+  --shadow-sm: 0 4rpx 16rpx rgba(26, 29, 32, 0.04);
+  --shadow-md: 0 16rpx 40rpx rgba(80, 43, 216, 0.12);
+  --radius-lg: 40rpx;
+  --radius-pill: 9999rpx;
+
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Segoe UI, Arial, Roboto, 'PingFang SC', 'miui', 'Hiragino Sans GB', 'Microsoft Yahei', sans-serif;
+}
+
+/* 全局点击态，呈现弹性反馈 */
+.hover-scale {
+  transform: scale(0.97);
+  transition: transform 0.2s cubic-bezier(0.1, 0.7, 0.1, 1);
+}
+
+/* 进场级联浮现动画 */
+@keyframes fadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(40rpx);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fade-up {
+  opacity: 0;
+  animation: fadeUp 0.8s cubic-bezier(0.1, 0.7, 0.1, 1) forwards;
+}

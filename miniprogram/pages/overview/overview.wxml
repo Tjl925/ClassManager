@@ -1,0 +1,36 @@
+<view class="container">
+  <view class="header animate-fade-up" style="animation-delay: 0ms;">
+    <text class="title">班级进度概览</text>
+    <text class="subtitle">下拉以获取最新数据</text>
+  </view>
+
+  <view class="bento-grid animate-fade-up" style="animation-delay: 100ms;">
+    <view class="bento-item" wx:for="{{progressData}}" wx:key="classId" hover-class="hover-scale" hover-stay-time="150">
+      <view class="class-title">{{item.classId}} 班</view>
+      
+      <block wx:if="{{item.pptName}}">
+        <view class="ppt-info">
+          <text class="ppt-name">{{item.pptName}}</text>
+        </view>
+        <view class="bottom-row">
+          <view class="status-indicator">
+            <view class="dot {{item.status === 'completed' ? 'dot-success' : 'dot-warning'}}"></view>
+            <text class="status-text {{item.status === 'completed' ? 'text-success' : 'text-warning'}}">
+              {{item.status === 'completed' ? '已讲完' : '部分完成'}}
+            </text>
+          </view>
+          <view class="page-count" wx:if="{{item.status === 'partial'}}">
+            {{item.currentPage}}/{{item.totalPage}}
+          </view>
+        </view>
+        <text class="update-time">更新于 {{item.lastUpdate}}</text>
+      </block>
+
+      <block wx:else>
+        <view class="empty-state">
+          <text>暂无打卡记录</text>
+        </view>
+      </block>
+    </view>
+  </view>
+</view>

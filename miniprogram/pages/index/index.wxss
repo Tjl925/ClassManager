@@ -1,0 +1,176 @@
+.container {
+  padding: 60rpx 40rpx 200rpx;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+.hero {
+  margin-bottom: 60rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.greeting {
+  font-size: 64rpx;
+  font-weight: 800;
+  letter-spacing: -2rpx;
+  line-height: 1.2;
+}
+.recommend-badge {
+  margin-top: 24rpx;
+  display: inline-flex;
+  align-items: center;
+  padding: 12rpx 24rpx;
+  background: rgba(0, 196, 140, 0.1);
+  color: var(--success-color);
+  border-radius: var(--radius-pill);
+  font-size: 26rpx;
+  font-weight: 600;
+}
+.recommend-badge .dot {
+  width: 12rpx;
+  height: 12rpx;
+  border-radius: 50%;
+  background: var(--success-color);
+  margin-right: 12rpx;
+}
+.bento-box {
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+}
+.bento-card {
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  padding: 40rpx;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: transform 0.4s cubic-bezier(0.1, 0.7, 0.1, 1);
+}
+.card-label {
+  font-size: 28rpx;
+  color: var(--text-sub);
+  width: 100rpx;
+}
+.card-value {
+  font-size: 34rpx;
+  font-weight: 700;
+  flex: 1;
+  text-align: right;
+  padding-right: 20rpx;
+}
+.ppt-text {
+  font-size: 30rpx;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.icon-arrow {
+  width: 12rpx;
+  height: 12rpx;
+  border-top: 4rpx solid #ccc;
+  border-right: 4rpx solid #ccc;
+  transform: rotate(45deg);
+}
+.state-card {
+  display: block;
+}
+.state-card .card-label {
+  display: block;
+  margin-bottom: 24rpx;
+}
+.toggle-group {
+  display: flex;
+  background: var(--bg-color);
+  border-radius: var(--radius-pill);
+  padding: 8rpx;
+}
+.toggle-item {
+  flex: 1;
+  text-align: center;
+  padding: 24rpx 0;
+  border-radius: var(--radius-pill);
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--text-sub);
+  transition: all 0.3s cubic-bezier(0.1, 0.7, 0.1, 1);
+}
+.active-success {
+  background: var(--card-bg);
+  color: var(--success-color);
+  box-shadow: 0 4rpx 16rpx rgba(0,0,0,0.06);
+}
+.active-warning {
+  background: var(--card-bg);
+  color: var(--warning-color);
+  box-shadow: 0 4rpx 16rpx rgba(0,0,0,0.06);
+}
+.expand-input {
+  display: none;
+  justify-content: center;
+  gap: 20rpx;
+  background: transparent;
+  box-shadow: none;
+  padding: 10rpx;
+}
+.expand-input.show {
+  display: flex;
+}
+.glass-input {
+  background: #E8EBEF;
+  border-radius: 20rpx;
+  height: 88rpx;
+  text-align: center;
+  font-size: 36rpx;
+  font-weight: 700;
+  width: 160rpx;
+  color: var(--primary-color);
+}
+.total-fixed {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+.ph-style {
+  color: #B0B5C0;
+  font-weight: 500;
+  font-size: 28rpx;
+}
+.slash {
+  font-size: 48rpx;
+  color: #D1D5DB;
+  font-weight: 300;
+}
+.action-bar {
+  margin: 40rpx 0 0;
+}
+.btn-submit {
+  background: var(--primary-color);
+  color: #fff;
+  height: 112rpx;
+  border-radius: var(--radius-pill);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 34rpx;
+  font-weight: 700;
+  box-shadow: var(--shadow-md);
+  letter-spacing: 2rpx;
+}
+.spinner {
+  width: 40rpx;
+  height: 40rpx;
+  border: 4rpx solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+.history-badge { font-size: 24rpx; color: var(--text-sub); display: flex; align-items: center; padding: 0 10rpx; margin-top: -10rpx; }
+.history-dot { width: 10rpx; height: 10rpx; border-radius: 50%; margin-right: 12rpx; }
+.bg-success { background: var(--success-color); }
+.bg-warning { background: var(--warning-color); }

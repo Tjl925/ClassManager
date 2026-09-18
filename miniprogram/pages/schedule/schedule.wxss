@@ -1,0 +1,129 @@
+.container {
+  padding: 40rpx 40rpx 200rpx;
+  background-color: var(--bg-color);
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+.week-pills {
+  display: flex;
+  justify-content: space-between;
+  background: #fff;
+  border-radius: var(--radius-pill);
+  padding: 12rpx;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 60rpx;
+  position: sticky;
+  top: 20rpx;
+  z-index: 10;
+}
+.pill {
+  width: 80rpx;
+  height: 80rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30rpx;
+  font-weight: 600;
+  color: var(--text-sub);
+  border-radius: 50%;
+  transition: all 0.3s cubic-bezier(0.1, 0.7, 0.1, 1);
+}
+.pill.active {
+  background: var(--primary-color);
+  color: #fff;
+  box-shadow: 0 8rpx 20rpx rgba(80, 43, 216, 0.3);
+}
+
+.timeline-box {
+  display: flex;
+  flex-direction: column;
+}
+.timeline-item {
+  display: flex;
+  min-height: 160rpx;
+}
+.time-col {
+  width: 150rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding-top: 20rpx;
+}
+.time-text {
+  font-size: 24rpx;
+  font-weight: 700;
+  color: var(--text-main);
+}
+.time-slot-name {
+  font-size: 22rpx;
+  color: var(--text-sub);
+  margin-top: 4rpx;
+}
+.divider {
+  width: 80rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+.dot {
+  width: 16rpx;
+  height: 16rpx;
+  background: #D8DBE1;
+  border-radius: 50%;
+  margin-top: 30rpx;
+  z-index: 2;
+  transition: all 0.3s ease;
+}
+.active-dot {
+  background: var(--primary-color);
+  box-shadow: 0 0 0 6rpx rgba(80, 43, 216, 0.15);
+}
+.line {
+  position: absolute;
+  top: 46rpx;
+  bottom: -30rpx;
+  width: 2rpx;
+  background: #E8EBEF;
+  z-index: 1;
+}
+.timeline-item:last-child .line {
+  display: none;
+}
+
+.content-col {
+  flex: 1;
+  padding-bottom: 40rpx;
+}
+.course-card {
+  border-radius: 32rpx;
+  padding: 30rpx 40rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.course-card.active {
+  background: var(--primary-color);
+  background: linear-gradient(135deg, #502BD8 0%, #7451FF 100%);
+  color: #fff;
+  box-shadow: var(--shadow-md);
+}
+.course-title {
+  font-size: 36rpx;
+  font-weight: 800;
+  letter-spacing: 2rpx;
+}
+.course-sub {
+  font-size: 24rpx;
+  opacity: 0.8;
+  margin-top: 8rpx;
+}
+.course-card.empty {
+  background: transparent;
+  padding: 20rpx;
+}
+.empty-text {
+  font-size: 28rpx;
+  color: #C0C5CF;
+  font-weight: 500;
+}

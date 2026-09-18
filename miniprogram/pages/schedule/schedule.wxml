@@ -1,0 +1,44 @@
+<view class="container">
+  <view class="week-pills animate-fade-up" style="animation-delay: 0ms;">
+    <view 
+      wx:for="{{['一','二','三','四','五']}}" 
+      wx:key="*this"
+      class="pill {{currentWeek === index + 1 ? 'active' : ''}}"
+      bindtap="switchWeek"
+      data-week="{{index + 1}}"
+    >
+      {{item}}
+    </view>
+  </view>
+
+  <view class="timeline-box animate-fade-up" style="animation-delay: 100ms;">
+    <view class="timeline-item" wx:for="{{timeSlots}}" wx:key="slot">
+      <!-- 左侧细长的时间轴 -->
+      <view class="time-col">
+        <text class="time-text">{{item.startTime}}-{{item.endTime}}</text>
+        <text class="time-slot-name">{{item.name}}</text>
+      </view>
+      
+      <!-- 中间的分隔线和小圆点 -->
+      <view class="divider">
+        <view class="dot {{todaySchedule[item.slot] ? 'active-dot' : ''}}"></view>
+        <view class="line"></view>
+      </view>
+
+      <!-- 右侧的课程卡片 -->
+      <view class="content-col" bindtap="changeSchedule" data-slot="{{item.slot}}">
+        <block wx:if="{{todaySchedule[item.slot]}}">
+          <view class="course-card active" hover-class="hover-scale" hover-stay-time="150">
+            <text class="course-title">{{todaySchedule[item.slot].classId}} 班</text>
+            <text class="course-sub">化学课</text>
+          </view>
+        </block>
+        <block wx:else>
+          <view class="course-card empty" hover-class="hover-scale" hover-stay-time="150">
+            <text class="empty-text">休息</text>
+          </view>
+        </block>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,62 @@
+<view class="container">
+  <view class="hero animate-fade-up" style="animation-delay: 0ms;">
+    <text class="greeting">Hi, 辛苦了</text>
+    <view class="recommend-badge" wx:if="{{recommendedClass}}">
+      <view class="dot"></view> {{recommendLabel}}: {{recommendedClass}}班
+    </view>
+  </view>
+
+  <view class="bento-box animate-fade-up" style="animation-delay: 100ms;">
+    <!-- 选择班级 -->
+    <picker bindchange="bindClassChange" value="{{classIndex}}" range="{{classList}}">
+      <view class="bento-card" hover-class="hover-scale" hover-stay-time="150">
+        <text class="card-label">班级</text>
+        <text class="card-value">{{classList[classIndex]}}</text>
+        <view class="icon-arrow"></view>
+      </view>
+    </picker>
+
+    <!-- 选择课件 -->
+    <picker bindchange="bindPptChange" value="{{pptIndex}}" range="{{pptNames}}">
+      <view class="bento-card" hover-class="hover-scale" hover-stay-time="150">
+        <text class="card-label">课件</text>
+        <text class="card-value ppt-text">{{pptNames[pptIndex]}}</text>
+        <view class="icon-arrow"></view>
+      </view>
+    </picker>
+    
+    <view class="history-badge animate-fade-up" wx:if="{{historyState}}">
+      <view class="history-dot {{historyState.status === 'completed' ? 'bg-success' : 'bg-warning'}}"></view>
+      <text>上次记录：{{historyState.status === 'completed' ? '已全讲完' : '讲到 ' + historyState.currentPage + '/' + historyState.totalPage}} ({{historyState.date}})</text>
+    </view>
+    
+    <!-- 状态选择 (自制开关组件外观) -->
+    <view class="bento-card state-card">
+      <text class="card-label">进度</text>
+      <view class="toggle-group">
+        <view 
+          class="toggle-item {{status === 'completed' ? 'active-success' : ''}}" 
+          bindtap="bindStatusChangeManual" 
+          data-val="completed">全讲完</view>
+        <view 
+          class="toggle-item {{status === 'partial' ? 'active-warning' : ''}}" 
+          bindtap="bindStatusChangeManual" 
+          data-val="partial">未讲完</view>
+      </view>
+    </view>
+
+    <!-- 进度页数输入框 (当未讲完时展开) -->
+    <view class="bento-card expand-input {{status === 'partial' ? 'show' : ''}}">
+      <input type="number" placeholder="当前" bindinput="bindCurrentPage" value="{{currentPage}}" placeholder-class="ph-style" class="glass-input"/>
+      <text class="slash">/</text>
+      <view class="glass-input total-fixed">{{pptList[pptIndex].totalPage}}</view>
+    </view>
+  </view>
+
+  <view class="action-bar animate-fade-up" style="animation-delay: 200ms;">
+    <view class="btn-submit {{isSubmitting ? 'loading' : ''}}" hover-class="hover-scale" hover-stay-time="150" bindtap="submitRecord">
+      <text wx:if="{{!isSubmitting}}">记录进度</text>
+      <view wx:else class="spinner"></view>
+    </view>
+  </view>
+</view>

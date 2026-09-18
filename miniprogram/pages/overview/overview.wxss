@@ -1,0 +1,108 @@
+.container {
+  padding: 60rpx 40rpx 200rpx;
+  background-color: var(--bg-color);
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+.header {
+  margin-bottom: 60rpx;
+}
+.title {
+  font-size: 56rpx;
+  font-weight: 800;
+  letter-spacing: -1rpx;
+  display: block;
+}
+.subtitle {
+  font-size: 26rpx;
+  color: var(--text-sub);
+  margin-top: 12rpx;
+  display: block;
+}
+
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30rpx;
+}
+.bento-item {
+  background: var(--card-bg);
+  border-radius: 40rpx;
+  padding: 40rpx 30rpx;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-sm);
+  aspect-ratio: 1 / 1.1; /* 让它接近正方形略高 */
+  position: relative;
+  transition: transform 0.4s cubic-bezier(0.1, 0.7, 0.1, 1);
+}
+.class-title {
+  font-size: 40rpx;
+  font-weight: 800;
+  color: var(--text-main);
+  margin-bottom: 20rpx;
+}
+.ppt-info {
+  flex: 1;
+  overflow: hidden;
+}
+.ppt-name {
+  font-size: 28rpx;
+  color: var(--text-main);
+  font-weight: 600;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  line-height: 1.4;
+}
+.bottom-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: 20rpx;
+}
+.status-indicator {
+  display: flex;
+  align-items: center;
+}
+.dot {
+  width: 12rpx;
+  height: 12rpx;
+  border-radius: 50%;
+  margin-right: 12rpx;
+}
+.dot-success { background: var(--success-color); }
+.dot-warning { background: var(--warning-color); }
+.status-text {
+  font-size: 24rpx;
+  font-weight: 700;
+}
+.text-success { color: var(--success-color); }
+.text-warning { color: var(--warning-color); }
+
+.page-count {
+  font-size: 26rpx;
+  font-weight: 800;
+  color: var(--text-sub);
+  background: #F2F4F8;
+  padding: 4rpx 16rpx;
+  border-radius: 12rpx;
+}
+
+.update-time {
+  font-size: 20rpx;
+  color: #C0C5CF;
+  margin-top: 16rpx;
+}
+
+.empty-state {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.empty-state text {
+  font-size: 26rpx;
+  color: #C0C5CF;
+  font-weight: 500;
+}
