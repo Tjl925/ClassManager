@@ -5,15 +5,16 @@
 
 ## Current Phase
 
-**Phase 3 — 增强功能**（方向待用户确认，候选见 `docs/PLAN.md`）。Phase 1/2 已全部完成并经用户验收。
+**维护期（Phase 1/2 已全部完成并经用户验收，Phase 3 暂缓）。**
+用户 2026-09-18 决定：功能先开发到这一步，暂不推进 Phase 3。
 
 ## Current Objective
 
-Phase 3 候选方向四选一/多选（周进度统计 / 课表导出图 / 课件列表维护 / 数据备份），**等用户拍板后才开始细化 Task**。
+保持现状可用。无排期中的开发目标；后续仅做必要维护（bug 修复、兼容性保障）。
 
 ## Current Task
 
-无进行中 Task。等待用户确认 Phase 3 方向。
+无进行中 Task。无下一个 Task。
 
 ## 当前实现状态
 
@@ -51,9 +52,7 @@ KISS / 无 npm / 单用户 / 不新增业务云函数 / 不改 progress 字段�
 
 ## Next Steps
 
-1. 用户确认 Phase 3 方向 → PLAN.md 细化为 Task → 开工。
-2. 若 Phase 3 做"周进度统计"，复用概览页的累计进度算法（`fetchData` 中 `frac` 计算）。
-3. 若做"课表导出图"，优先调研小程序原生 canvas 方案（无 npm 约束）。
+无排期。若用户提出新需求：先确认方向 → `PLAN.md` 细化为 Task → 开工；开工前重读 `AGENTS.md` §4–§5 约束（KISS / 无 npm / 不改 `progress` 字段名 / UI 设计系统）。
 
 ## Verification Status
 
