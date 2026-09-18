@@ -16,7 +16,7 @@
 │         │                 │                 │                                      │
 │  config/constants.js ◄────┴─────────────────┘   （业务配置唯一来源）                  │
 └─────────┼─────────────────────────────────────────────────────────────────────────┘
-          │ wx.cloud.database()  客户端直连（集合默认"仅创建者可读写"）
+          │ wx.cloud.database()  客户端直连（集合权限：所有用户可读，仅创建者可写）
           ▼
    云开发 CloudBase（DYNAMIC_CURRENT_ENV）
    集合 progress：打卡记录
@@ -43,6 +43,7 @@ D:\ClassManager
 │   ├── app.wxss                 # 全局设计系统（CSS 变量、hover-scale、animate-fade-up）
 │   ├── config/constants.js      # ★ 业务配置唯一来源
 │   ├── custom-tab-bar/          # 自定义 tab 栏
+│   ├── envList.js               # 模板残留（空 envList + isMac），零引用。保留原因见下
 │   └── pages/
 │       ├── index/               # 打卡首页
 │       ├── schedule/            # 课表页
@@ -50,14 +51,17 @@ D:\ClassManager
 └── cloudfunctions/quickstartFunctions/   # 模板演示代码，非业务
 ```
 
+> **已清理的模板残留（2026-09-18）**：`pages/example/`、`components/cloudTipModal/`、`images/`（31 个文件）已删除，包体 1.4M → 85K。删除前逐项验证过引用链（唯一被引用的 `icons/close.png` 只服务于 `cloudTipModal`，而后者只被 `pages/example` 引用）。文件保留在 Git 历史中。
+> **`envList.js` 故意未删**：零引用，但属 CloudBase 模板约定文件，无法离线确认开发者工具是否读取它，仅 100 字节，保留成本为零。
+
 ## 核心模块与职责
 
 ### config/constants.js（唯一配置源）
 
 | 导出 | 内容 |
 |---|---|
-| `pptList` | 23 个课件 `{ id, name, totalPage }`。`totalPage` 来自 `pptTotalPages` 数组，按**下标一一对应**（改课件必须两数组同步） |
-| `pptTotalPages` | 23 个总页数（PPT 实测，见 D001） |
+| `pptList` | ★导出。23 个课件 `{ id, name, totalPage }`。`totalPage` 由模块内 `pptTotalPages` 按**下标一一对应** map 生成（改课件必须两数组同步） |
+| ~~`pptTotalPages`~~ | 23 个总页数（PPT 实测，见 D001）。**模块内定义，不从 `module.exports` 导出**，外部只能读 `pptList[i].totalPage` |
 | `initialSchedule` | 四班化学课固定排布 `{ classId, week(1-5), slot(1-11) }`，每班 3 节正课 + 1 节晚自习 |
 | `timeSlots` | 11 个节次 `{ slot, name, startTime, endTime }`，08:00–21:40 |
 
@@ -118,7 +122,7 @@ D:\ClassManager
 
 1. **打卡**：选班/选课件（或智能推荐）→ 选状态 → 填当前页（partial）→ `progress.add` → 刷新上次记录徽章。
 2. **调课**：点课表卡片 → actionSheet → 写 storage → 立即重渲染（无网络）。
-3. **概览**：四班并行查最新记录 → Grid 渲染。
+3. **概览**：四班并行查最新记录 → 排名式卡片列表渲染（升序，见 D008）。
 4. **回补（一次性）**：启动打卡页 → storage 检查 → 分页拉全量 → 逐条对齐 totalPage → 置标记。
 
 ## 外部依赖
