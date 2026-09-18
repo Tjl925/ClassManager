@@ -34,7 +34,7 @@
 - 不引入 npm 包 / UI 组件库 / 编译框架。
 - 不新增云函数承载业务逻辑，除非用户明确要求（当前数据量极小，客户端直连云库足够）。
 - 不修改 `progress` 集合已有字段名：`class_id, ppt_name, status, currentPage, totalPage, date, timestamp`。新增字段可以，改名/删除不行（已有历史数据）。
-- 课件固定 23 个，总页数固定（见 constants.js 的 `pptTotalPages`）。课件增删必须同步改 `pptList` 和 `pptTotalPages`，且顺序一一对应。
+- 课件固定 23 个，总页数固定（写在 `constants.js` 的 `pptList` 每项的 `totalPage` 字段，无独立映射表）。课件增删改 `pptList` 即可，顺序与课表引用一一对应。
 - 班级固定 4 个：2606 / 2607 / 2608 / 2609。
 - 状态枚举固定：`status: 'completed' | 'partial'`。
 
