@@ -12,8 +12,8 @@
 | Phase | 目标 | 粒度 | 状态 |
 |---|---|---|---|
 | Phase 1 | 核心三页 MVP + Awwwards UI 重构 | 已归档 | ✅ Completed |
-| Phase 2 | 健壮性修复与数据治理 | 详细（当前） | In Progress |
-| Phase 3 | 增强功能（方向待定，见下） | 中等 | Planned |
+| Phase 2 | 健壮性修复与数据治理 | 详细 | ✅ Completed |
+| Phase 3 | 增强功能（方向待确认，见下） | 中等 | In Progress |
 | Phase 4+ | 远期方向 | 方向级 | Planned |
 
 ---
@@ -31,28 +31,29 @@ Exit Criteria（已全部满足）：三页主流程可用，UI 体系统一。
 
 ---
 
-## Phase 2 — 健壮性修复与数据治理（当前 Phase）
+## Phase 2 — 健壮性修复与数据治理（✅ 已完成，2026-09-18 用户全部验收）
 
-**目标**：修掉实际使用中暴露的 bug，把"课件总页数"从手填变成固定数据，清掉历史脏数据，建立长期项目上下文体系。
+**目标**：修掉实际使用中暴露的 bug，把"课件总页数"从手填变成固定数据，清掉历史脏数据，建立长期项目上下文体系，概览页重做。
 
-**Exit Criteria（完成标准）**：
-1. 课表页切 tab 再切回，滚动位置归零，无 sticky 重叠。
-2. 打卡页"未讲完"只需填当前页，总页自动取自固定值。
-3. 旧 `progress` 记录中 partial 的 totalPage 与固定值一致（回补跑过且确认）。
-4. 三页在开发者工具中完整回归通过，无新增异常。
-5. 长期上下文文件体系（AGENTS.md + docs/ 四件套）建立，与代码一致。
+**Exit Criteria（已全部满足）**：
+1. ✅ 课表页切 tab 再切回，滚动位置归零，无 sticky 重叠。
+2. ✅ 打卡页"未讲完"只需填当前页，总页自动取自固定值。
+3. ✅ 旧 `progress` 记录中 partial 的 totalPage 已回补对齐（用户确认执行）。
+4. ✅ 三页在开发者工具中完整回归通过。
+5. ✅ 长期上下文文件体系建立，与代码一致。
+6. ✅ 概览页重做（排名式进度对比）通过用户目检。
 
 ### Task 列表
 
 | ID | Task | 状态 | 验证情况 |
 |---|---|---|---|
-| T2.1 | 课表页切回后滚动归零（onShow + pageScrollTo） | ✅ Completed | `node --check` 过；UI 行为待开发者工具人工确认 |
-| T2.2 | 课件总页数固定入 constants.js（23 个，按 PPT 实测），打卡页总页改只读展示 | ✅ Completed | `node --check` 过；23 条页数映射逐条核对正确；UI 待人工确认 |
-| T2.3 | 总页展示值垂直居中（独立 `.total-fixed` 类） | ✅ Completed | 样式已改，待开发者工具目检 |
+| T2.1 | 课表页切回后滚动归零（onShow + pageScrollTo） | ✅ Completed | 用户验收通过 |
+| T2.2 | 课件总页数固定入 constants.js（23 个，按 PPT 实测），打卡页总页改只读展示 | ✅ Completed | 映射逐条核对 + 用户验收 |
+| T2.3 | 总页展示值垂直居中（独立 `.total-fixed` 类） | ✅ Completed | 用户验收通过 |
 | T2.4 | 旧数据 totalPage 一次性回补（客户端 `fixLegacyTotalPages`，storage 防重） | ✅ Completed | 用户已在开发者工具确认执行，验收通过 |
 | T2.5 | Git 初始化 + 长期上下文文件体系（AGENTS.md / PLAN / STATE / DECISIONS / ARCHITECTURE） | ✅ Completed | 仓库已建，已推送 https://github.com/Tjl925/ClassManager |
 | T2.6 | 开发者工具全量回归（三页主流程 + 调课 + 回补控制台输出） | ✅ Completed | 用户已全部验收通过（2026-09-18） |
-| T2.7 | 概览页重做：排名式进度对比（排序+全书百分比+细进度条+落后差距），修复换行错位 | In Progress | 代码完成；`node --check` + 模拟数据逻辑验证过；**待开发者工具目检** |
+| T2.7 | 概览页重做：排名式进度对比（排序+全书百分比+细进度条+落后差距），修复换行错位 | ✅ Completed | node --check + 模拟数据 + 用户目检全过（2026-09-18） |
 
 ---
 
