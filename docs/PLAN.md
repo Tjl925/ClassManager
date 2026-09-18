@@ -49,9 +49,10 @@ Exit Criteria（已全部满足）：三页主流程可用，UI 体系统一。
 | T2.1 | 课表页切回后滚动归零（onShow + pageScrollTo） | ✅ Completed | `node --check` 过；UI 行为待开发者工具人工确认 |
 | T2.2 | 课件总页数固定入 constants.js（23 个，按 PPT 实测），打卡页总页改只读展示 | ✅ Completed | `node --check` 过；23 条页数映射逐条核对正确；UI 待人工确认 |
 | T2.3 | 总页展示值垂直居中（独立 `.total-fixed` 类） | ✅ Completed | 样式已改，待开发者工具目检 |
-| T2.4 | 旧数据 totalPage 一次性回补（客户端 `fixLegacyTotalPages`，storage 防重） | In Progress | 代码完成，语法过；**回补是否实际执行、回补条数待用户在开发者工具确认** |
-| T2.5 | Git 初始化 + 长期上下文文件体系（AGENTS.md / PLAN / STATE / DECISIONS / ARCHITECTURE） | In Progress | 文件创建中 |
-| T2.6 | 开发者工具全量回归（三页主流程 + 调课 + 回补控制台输出） | Planned | — |
+| T2.4 | 旧数据 totalPage 一次性回补（客户端 `fixLegacyTotalPages`，storage 防重） | ✅ Completed | 用户已在开发者工具确认执行，验收通过 |
+| T2.5 | Git 初始化 + 长期上下文文件体系（AGENTS.md / PLAN / STATE / DECISIONS / ARCHITECTURE） | ✅ Completed | 仓库已建，已推送 https://github.com/Tjl925/ClassManager |
+| T2.6 | 开发者工具全量回归（三页主流程 + 调课 + 回补控制台输出） | ✅ Completed | 用户已全部验收通过（2026-09-18） |
+| T2.7 | 概览页重做：排名式进度对比（排序+全书百分比+细进度条+落后差距），修复换行错位 | In Progress | 代码完成；`node --check` + 模拟数据逻辑验证过；**待开发者工具目检** |
 
 ---
 

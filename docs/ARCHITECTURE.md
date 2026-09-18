@@ -84,7 +84,10 @@ D:\ClassManager
 ### pages/overview — 概览页
 
 - `onShow` → `fetchData()`；`onPullDownRefresh` 同。
-- `fetchData()`：四班并行查 `progress` 各最新 1 条（`Promise.all`）→ 2x2 Bento Grid 展示最新课件 + 进度 + 日期。
+- `fetchData()`：四班并行查 `progress` 各最新 1 条（`Promise.all`）→ 每班算**累计进度**：`idx = pptList.findIndex(ppt_name)`，`sub = completed ? 1 : currentPage/totalPage`，`frac = (idx + sub) / 23` → 按 `frac` **升序排序（最慢在前）** → 计算与末位（榜首）差距 → `setData({ progressData })`。
+- 展示：排名卡片列表。每卡 = 班级号 + 位置标签（进度最快 / 落后 N 讲 / 基本持平）+ 第 N 讲/23 + 百分比 + 细进度条 + 当前课件（单行省略号）+ 状态（点+文字）+ 更新日期。
+- 兜底：无记录或查询失败 → `makePlaceholders()` 四张占位卡（`hasRecord: false`），页面不空白。
+- 颜色分工见 DECISIONS D008，改动前必读。
 
 ### custom-tab-bar
 

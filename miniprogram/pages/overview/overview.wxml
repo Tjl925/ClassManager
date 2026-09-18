@@ -1,36 +1,56 @@
 <view class="container">
   <view class="header animate-fade-up" style="animation-delay: 0ms;">
     <text class="title">班级进度概览</text>
-    <text class="subtitle">下拉以获取最新数据</text>
+    <text class="subtitle">按全书进度排序 · 最慢的排最前 · 下拉刷新</text>
   </view>
 
-  <view class="bento-grid animate-fade-up" style="animation-delay: 100ms;">
-    <view class="bento-item" wx:for="{{progressData}}" wx:key="classId" hover-class="hover-scale" hover-stay-time="150">
-      <view class="class-title">{{item.classId}} 班</view>
-      
-      <block wx:if="{{item.pptName}}">
-        <view class="ppt-info">
-          <text class="ppt-name">{{item.pptName}}</text>
+  <view class="rank-list">
+    <view
+      class="rank-card animate-fade-up"
+      wx:for="{{progressData}}"
+      wx:key="classId"
+      style="animation-delay: {{100 + index * 80}}ms;"
+      hover-class="hover-scale"
+      hover-stay-time="150"
+    >
+      <!-- 头部：班级号 + 位置标签 -->
+      <view class="card-head">
+        <text class="class-title">{{item.classId}} 班</text>
+        <view class="spacer"></view>
+        <view wx:if="{{item.tagText}}" class="tag {{item.isLeader ? 'tag-lead' : ''}}">{{item.tagText}}</view>
+      </view>
+
+      <block wx:if="{{item.hasRecord}}">
+        <!-- 主体：讲到第几讲 + 全书百分比 -->
+        <view class="hero-row">
+          <text class="hero-num">{{item.lessonNo}}</text>
+          <text class="hero-total">/ {{item.totalLessons}} 讲</text>
+          <view class="spacer"></view>
+          <text class="pct">{{item.pct}}%</text>
         </view>
-        <view class="bottom-row">
-          <view class="status-indicator">
+
+        <!-- 细进度条 -->
+        <view class="meter-track">
+          <view class="meter-fill" style="width: {{item.meterPct}}%;"></view>
+        </view>
+
+        <!-- 当前课件 + 状态 -->
+        <view class="info-row">
+          <text class="ppt-name">{{item.pptName}}</text>
+          <view class="status-chip">
             <view class="dot {{item.status === 'completed' ? 'dot-success' : 'dot-warning'}}"></view>
             <text class="status-text {{item.status === 'completed' ? 'text-success' : 'text-warning'}}">
-              {{item.status === 'completed' ? '已讲完' : '部分完成'}}
+              {{item.status === 'completed' ? '已讲完' : '讲到 ' + item.currentPage + '/' + item.totalPage + ' 页'}}
             </text>
           </view>
-          <view class="page-count" wx:if="{{item.status === 'partial'}}">
-            {{item.currentPage}}/{{item.totalPage}}
-          </view>
         </view>
+
         <text class="update-time">更新于 {{item.lastUpdate}}</text>
       </block>
 
-      <block wx:else>
-        <view class="empty-state">
-          <text>暂无打卡记录</text>
-        </view>
-      </block>
+      <view wx:else class="empty-state">
+        <text>暂无打卡记录</text>
+      </view>
     </view>
   </view>
 </view>
