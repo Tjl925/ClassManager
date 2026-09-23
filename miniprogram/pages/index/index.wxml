@@ -58,5 +58,81 @@
       <text wx:if="{{!isSubmitting}}">记录进度</text>
       <view wx:else class="spinner"></view>
     </view>
+
+    <!-- 撤销入口：常驻占位（避免布局跳动）。目标 = 上方"上次记录"徽章显示的那一条，
+         所以不限于刚提交的，之前误点的记录也能删掉。无可撤销记录时置灰不可点。 -->
+    <view
+      class="btn-undo {{historyState ? '' : 'is-disabled'}}"
+      hover-class="{{historyState ? 'hover-scale' : 'none'}}"
+      hover-stay-time="150"
+      bindtap="undoRecord"
+    >
+      <text class="undo-icon">↩</text>
+      <text>{{historyState ? '撤销这条记录' : '暂无可撤销记录'}}</text>
+    </view>
+  </view>
+
+  <!-- 横向进度轴：只读指示器，永远停在该班的实际进度上，不随"选择课件"移动 -->
+  <view class="track-section animate-fade-up" style="animation-delay: 300ms;">
+    <scroll-view class="track-scroll" scroll-x scroll-left="{{trackScrollLeft}}" scroll-with-animation>
+      <view class="track-inner">
+        <view
+          class="track-node {{axisDone[index] ? 'is-done' : ''}} {{index === axisIndex ? 'is-current' : ''}}"
+          wx:for="{{pptList}}"
+          wx:key="id"
+        >
+          <view class="node-num">{{item.shortLabel}}</view>
+          <view class="node-axis">
+            <view class="axis-line"></view>
+            <view class="axis-dot"></view>
+            <view class="axis-line"></view>
+          </view>
+          <view class="node-name">{{item.shortName}}</view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 确认弹窗：提交与撤销共用一套 -->
+  <view class="modal-mask" wx:if="{{showConfirm}}" catchtouchmove="noop" bindtap="cancelConfirm">
+    <view class="modal-card animate-fade-up" catchtap="noop">
+      <text class="modal-title">{{confirmMode === 'undo' ? '撤销这次记录？' : '确认记录进度'}}</text>
+      <text class="modal-sub">{{confirmMode === 'undo' ? '这条记录将从云端删除，无法恢复' : '确认无误后再写入云端'}}</text>
+
+      <view class="modal-body">
+        <view class="modal-row">
+          <text class="modal-key">班级</text>
+          <text class="modal-val">{{confirmInfo.classId}} 班</text>
+        </view>
+        <view class="modal-row">
+          <text class="modal-key">课件</text>
+          <text class="modal-val">{{confirmInfo.pptName}}</text>
+        </view>
+        <view class="modal-row">
+          <text class="modal-key">进度</text>
+          <text class="modal-val {{confirmInfo.status === 'completed' ? 'val-success' : 'val-warning'}}">
+            <text class="val-dot {{confirmInfo.status === 'completed' ? 'bg-success' : 'bg-warning'}}"></text>{{confirmInfo.statusText}}
+          </text>
+        </view>
+        <view class="modal-row">
+          <text class="modal-key">页数</text>
+          <text class="modal-val">{{confirmInfo.pageText}}</text>
+        </view>
+        <view class="modal-row" wx:if="{{confirmInfo.date}}">
+          <text class="modal-key">日期</text>
+          <text class="modal-val">{{confirmInfo.date}}</text>
+        </view>
+      </view>
+
+      <view class="modal-actions">
+        <view class="modal-btn ghost" hover-class="hover-scale" hover-stay-time="150" bindtap="cancelConfirm">取消</view>
+        <view
+          class="modal-btn {{confirmMode === 'undo' ? 'danger' : 'primary'}}"
+          hover-class="hover-scale"
+          hover-stay-time="150"
+          bindtap="confirmAction"
+        >{{confirmMode === 'undo' ? '确认撤销' : '确认记录'}}</view>
+      </view>
+    </view>
   </view>
 </view>
