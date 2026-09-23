@@ -30,7 +30,6 @@
         <block wx:if="{{todaySchedule[item.slot]}}">
           <view class="course-card active" hover-class="hover-scale" hover-stay-time="150">
             <text class="course-title">{{todaySchedule[item.slot].classId}} 班</text>
-            <text class="course-sub">化学课</text>
           </view>
         </block>
         <block wx:else>

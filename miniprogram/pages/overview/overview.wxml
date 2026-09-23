@@ -1,7 +1,6 @@
 <view class="container">
   <view class="header animate-fade-up" style="animation-delay: 0ms;">
     <text class="title">班级进度概览</text>
-    <text class="subtitle">按全书进度排序 · 最慢的排最前 · 下拉刷新</text>
   </view>
 
   <view class="rank-list">
