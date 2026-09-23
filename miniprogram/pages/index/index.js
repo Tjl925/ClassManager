@@ -1,4 +1,4 @@
-const { pptList, initialSchedule, timeSlots } = require('../../config/constants.js');
+const { pptList, initialSchedule, timeSlots, formatDate } = require('../../config/constants.js');
 
 Page({
   data: {
@@ -26,66 +26,103 @@ Page({
     }
   },
 
-  // 智能推荐：找"上次上课的班"（当前时间 >= slot 左边界），显示其最新课件
+  // 智能推荐：按"上课中 -> 刚下课(60分内) -> 离当前最近的未来第一节课"层级匹配
   async smartRecommend() {
     try {
       const now = new Date();
-      const currentWeek = now.getDay() || 7;
+      const currentWeek = now.getDay() || 7; // 1(周一) - 7(周日)
       const currentMins = now.getHours() * 60 + now.getMinutes();
 
-      // 找今天所有"已过"的 slot（当前时间 >= slot 左边界），取最后一个对应的班级
-      let lastClassId = null;
-      let lastSlot = null;
-      for (let slot of timeSlots) {
-        const slotStart = parseInt(slot.startTime.split(':')[0]) * 60 + parseInt(slot.startTime.split(':')[1]);
-        const target = initialSchedule.find(s => s.week === currentWeek && s.slot === slot.slot);
-        if (target && currentMins >= slotStart) {
-          lastClassId = target.classId;
-          lastSlot = slot;
+      // 获取某星期某节次的实际班级（支持 customSchedule 调课覆盖）
+      const getScheduleClass = (week, slot) => {
+        const customSchedule = wx.getStorageSync('customSchedule') || {};
+        const key = `${week}-${slot}`;
+        if (customSchedule[key] !== undefined) {
+          return customSchedule[key] === 'none' ? null : customSchedule[key];
         }
-      }
+        const target = initialSchedule.find(s => s.week === week && s.slot === slot);
+        return target ? target.classId : null;
+      };
 
-      // 状态标签：按真实时段区分（上课中 / 刚下课 / 上节课）
+      const timeToMins = (timeStr) => {
+        const [h, m] = timeStr.split(':');
+        return parseInt(h, 10) * 60 + parseInt(m, 10);
+      };
+
+      let targetClassId = null;
       let recommendLabel = '';
-      if (lastSlot) {
-        const slotEnd = parseInt(lastSlot.endTime.split(':')[0]) * 60 + parseInt(lastSlot.endTime.split(':')[1]);
-        if (currentMins < slotEnd) {
+
+      // 1. 检查今天正在上课的 slot
+      for (let slot of timeSlots) {
+        const start = timeToMins(slot.startTime);
+        const end = timeToMins(slot.endTime);
+        const classId = getScheduleClass(currentWeek, slot.slot);
+        if (classId && currentMins >= start && currentMins <= end) {
+          targetClassId = classId;
           recommendLabel = '上课中';
-        } else if (currentMins - slotEnd <= 30) {
-          recommendLabel = '刚下课';
-        } else {
-          recommendLabel = '上节课';
+          break;
         }
       }
 
-      // 今天没课，找明天
-      if (!lastClassId) {
-        const tomorrow = (currentWeek % 7) + 1;
-        for (let slot of timeSlots) {
-          const slotStart = parseInt(slot.startTime.split(':')[0]) * 60 + parseInt(slot.startTime.split(':')[1]);
-          const target = initialSchedule.find(s => s.week === tomorrow && s.slot === slot.slot);
-          if (target && currentMins >= slotStart) {
-            lastClassId = target.classId;
-            recommendLabel = '下节课';
+      // 2. 若无正在上课，检查今天刚下课 60 分钟内的 slot（取最近下课的）
+      if (!targetClassId) {
+        for (let i = timeSlots.length - 1; i >= 0; i--) {
+          const slot = timeSlots[i];
+          const end = timeToMins(slot.endTime);
+          const classId = getScheduleClass(currentWeek, slot.slot);
+          if (classId && currentMins > end && (currentMins - end) <= 60) {
+            targetClassId = classId;
+            recommendLabel = '刚下课';
+            break;
           }
         }
       }
 
-      if (!lastClassId) {
+      // 3. 若不在即时打卡窗口，寻找离当前时间最近的"下节课"
+      if (!targetClassId) {
+        // 3.1 今天后续尚未开始的课程（按时段从早到晚）
+        for (let slot of timeSlots) {
+          const start = timeToMins(slot.startTime);
+          const classId = getScheduleClass(currentWeek, slot.slot);
+          if (classId && currentMins < start) {
+            targetClassId = classId;
+            recommendLabel = '下节课';
+            break;
+          }
+        }
+
+        // 3.2 若今天后续无课，向后逐天查找未来 7 天内最早的一节排课
+        if (!targetClassId) {
+          for (let offset = 1; offset <= 7; offset++) {
+            const nextWeek = ((currentWeek - 1 + offset) % 7) + 1;
+            for (let slot of timeSlots) {
+              const classId = getScheduleClass(nextWeek, slot.slot);
+              if (classId) {
+                targetClassId = classId;
+                recommendLabel = '下节课';
+                break;
+              }
+            }
+            if (targetClassId) break;
+          }
+        }
+      }
+
+      if (!targetClassId) {
         this.setData({ classIndex: 0, recommendedClass: '', recommendLabel: '' });
         return this.applyPpt(0);
       }
 
       // 查该班最新课件
-      const pptIndex = await this.getLatestPptIndex(lastClassId);
+      const pptIndex = await this.getLatestPptIndex(targetClassId);
 
-      const idx = this.data.classList.indexOf(lastClassId);
+      const idx = this.data.classList.indexOf(targetClassId);
       this.setData({
-        classIndex: idx,
-        recommendedClass: lastClassId,
+        classIndex: idx >= 0 ? idx : 0,
+        recommendedClass: targetClassId,
         recommendLabel: recommendLabel
       });
-      wx.showToast({ title: `推荐打卡：${lastClassId}班`, icon: 'none' });
+      wx.showToast({ title: `推荐打卡：${targetClassId}班`, icon: 'none' });
       this.applyPpt(Math.min(pptIndex, this.data.pptNames.length - 1));
     } catch (err) {
       console.log('智能推荐异常:', err);
@@ -131,7 +168,9 @@ Page({
         .get();
 
       if (res.data.length > 0) {
-        this.setData({ historyState: res.data[0] });
+        const item = res.data[0];
+        item.date = formatDate(item.date || item.timestamp);
+        this.setData({ historyState: item });
       } else {
         this.setData({ historyState: null });
       }
@@ -210,7 +249,7 @@ Page({
         status: this.data.status,
         currentPage: this.data.currentPage,
         totalPage: this.data.totalPage,
-        date: new Date().toLocaleDateString(),
+        date: formatDate(new Date()),
         timestamp: db.serverDate()
       };
 

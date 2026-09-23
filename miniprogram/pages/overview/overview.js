@@ -1,4 +1,4 @@
-const { pptList } = require('../../config/constants.js');
+const { pptList, formatDate } = require('../../config/constants.js');
 
 const TOTAL_LESSONS = pptList.length; // 全书 23 讲
 const CLASS_LIST = ['2606', '2607', '2608', '2609'];
@@ -65,7 +65,7 @@ Page({
           status: rec.status,
           currentPage,
           totalPage,
-          lastUpdate: rec.date,
+          lastUpdate: formatDate(rec.date || rec.timestamp),
           _frac: frac
         };
       });

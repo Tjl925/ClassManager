@@ -69,8 +69,32 @@ const timeSlots = [
   { slot: 11, name: "晚三", startTime: "20:55", endTime: "21:40" },
 ];
 
+// 统一日期格式化：统一输出为 YYYY-MM-DD，兼容字符串/时间戳/Date/云开发对象
+function formatDate(d) {
+  if (!d) return '';
+  let date;
+  if (d instanceof Date) {
+    date = d;
+  } else if (typeof d === 'number') {
+    date = new Date(d);
+  } else if (typeof d === 'string') {
+    date = new Date(d);
+  } else if (d && typeof d === 'object' && typeof d.toDate === 'function') {
+    date = d.toDate();
+  }
+  if (!date || isNaN(date.getTime())) {
+    return String(d || '');
+  }
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
 module.exports = {
   pptList,
   initialSchedule,
-  timeSlots
+  timeSlots,
+  formatDate
 };
+
