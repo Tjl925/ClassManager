@@ -1,6 +1,29 @@
 // 课件总页数（按 PPT 文件实测固定，与上方列表一一对应）
 const pptTotalPages = [31, 28, 23, 28, 25, 27, 27, 31, 29, 32, 30, 27, 26, 33, 29, 30, 34, 23, 26, 28, 35, 24, 43];
 
+// 进度轴上方短标签：优先取 "x.y.z" 编号前缀；章末课无编号，取「第X章习题／复习」
+// 注意：新增/修改课件名时，此处派生逻辑自动跟随，无需手工维护第二份标签表
+function shortLabelOf(name) {
+  const text = String(name);
+  const num = text.match(/^(\d+\.\d+\.\d+)/);
+  if (num) return num[1];
+  const chapter = (text.match(/^(第[一二三四五六七八九十]+章)/) || [])[1] || '';
+  if (text.indexOf('章末习题课') >= 0) return chapter + '习题';
+  if (text.indexOf('章末复习') >= 0) return chapter + '复习';
+  return text.slice(0, 4);
+}
+
+// 进度轴下方短名：去掉上方已显示的序号前缀，避免同一节点上重复两遍编号
+//   "1.1.1 物质的分类"            -> "物质的分类"
+//   "第一章 物质及其变化 章末习题课" -> "物质及其变化 章末习题课"
+function shortNameOf(name) {
+  const text = String(name);
+  const stripped = text
+    .replace(/^\d+\.\d+\.\d+\s+/, '')
+    .replace(/^第[一二三四五六七八九十]+章\s+/, '');
+  return stripped || text;
+}
+
 // 课件列表
 const pptList = [
   "1.1.1 物质的分类",
@@ -26,7 +49,13 @@ const pptList = [
   "第一章 物质及其变化 章末复习",
   "第二章 海水中的重要元素——钠和氯 章末习题课",
   "第二章 海水中的重要元素——钠和氯 章末复习"
-].map((name, index) => ({ id: index + 1, name, totalPage: pptTotalPages[index] }));
+].map((name, index) => ({
+  id: index + 1,
+  name,
+  shortLabel: shortLabelOf(name),
+  shortName: shortNameOf(name),
+  totalPage: pptTotalPages[index]
+}));
 
 // 班级默认课表 (根据用户修正后的排课)
 // week: 1(周一)-5(周五)
@@ -91,10 +120,21 @@ function formatDate(d) {
   return `${year}-${month}-${day}`;
 }
 
+// 本周周一的日期（YYYY-MM-DD），用作"第几周"的标识。
+// 调课覆盖按它分区存储：读取时只查本周的 weekTag，上周的数据自然匹配不到，
+// 于是"当周有效"是天然实现的 —— 不需要删除、也不需要定时任务。
+function mondayTag(d) {
+  const date = d ? new Date(d) : new Date();
+  const day = date.getDay() || 7; // 周日 getDay() 返回 0，按 7 处理
+  date.setDate(date.getDate() - (day - 1));
+  return formatDate(date);
+}
+
 module.exports = {
   pptList,
   initialSchedule,
   timeSlots,
-  formatDate
+  formatDate,
+  mondayTag
 };
 
