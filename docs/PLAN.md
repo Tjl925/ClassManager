@@ -54,6 +54,8 @@ Exit Criteria（已全部满足）：三页主流程可用，UI 体系统一。
 | T2.5 | Git 初始化 + 长期上下文文件体系（AGENTS.md / PLAN / STATE / DECISIONS / ARCHITECTURE） | ✅ Completed | 仓库已建，已推送 https://github.com/Tjl925/ClassManager |
 | T2.6 | 开发者工具全量回归（三页主流程 + 调课 + 回补控制台输出） | ✅ Completed | 用户已全部验收通过（2026-09-18） |
 | T2.7 | 概览页重做：排名式进度对比（排序+全书百分比+细进度条+落后差距），修复换行错位 | ✅ Completed | node --check + 模拟数据 + 用户目检全过（2026-09-18） |
+| T2.8 | 课表页与概览页 Single Viewport 一页式改造（免滚动，删化学课三字与概览副标题，均分视口） | ✅ Completed | 代码与样式校验通过（2026-09-20） |
+| T2.9 | 打卡智能推荐排课修复（支持调课覆盖联动、修复跨天/周末就近未来课程扫描） | ✅ Completed | 9 项自动化测试全部通过（2026-09-20） |
 
 ---
 
