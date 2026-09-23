@@ -44,6 +44,41 @@ page {
   box-shadow: 0 6rpx 16rpx rgba(80, 43, 216, 0.3);
 }
 
+/* 切周动画层：单独包一层，避免与 .timeline-box 上的 animate-fade-up 抢 animation 属性
+   （.animate-fade-up 同时带 opacity:0，两个 animation 类叠加会让内容卡在透明状态） */
+.timeline-wrap {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.timeline-wrap.slide-next { animation: slideNext 0.32s cubic-bezier(0.1, 0.7, 0.1, 1); }
+.timeline-wrap.slide-prev { animation: slidePrev 0.32s cubic-bezier(0.1, 0.7, 0.1, 1); }
+.timeline-wrap.bounce-left { animation: bounceLeft 0.32s cubic-bezier(0.1, 0.7, 0.1, 1); }
+.timeline-wrap.bounce-right { animation: bounceRight 0.32s cubic-bezier(0.1, 0.7, 0.1, 1); }
+
+/* 左滑 = 后一天：新一天的内容从右侧进场 */
+@keyframes slideNext {
+  from { opacity: 0.25; transform: translateX(60rpx); }
+  to   { opacity: 1;    transform: translateX(0); }
+}
+/* 右滑 = 前一天：新一天的内容从左侧进场 */
+@keyframes slidePrev {
+  from { opacity: 0.25; transform: translateX(-60rpx); }
+  to   { opacity: 1;    transform: translateX(0); }
+}
+/* 已到周五还左滑 / 已到周一还右滑：跟随手指方向轻微位移后弹回 */
+@keyframes bounceLeft {
+  0%   { transform: translateX(0); }
+  40%  { transform: translateX(-26rpx); }
+  100% { transform: translateX(0); }
+}
+@keyframes bounceRight {
+  0%   { transform: translateX(0); }
+  40%  { transform: translateX(26rpx); }
+  100% { transform: translateX(0); }
+}
+
 .timeline-box {
   flex: 1;
   min-height: 0;
